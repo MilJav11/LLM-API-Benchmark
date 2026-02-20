@@ -38,7 +38,7 @@ During testing, we discovered that **Qwen 2.5:0.5b** has issues following strict
 
 This framework is designed to be easily extensible. To add a new model to the benchmark, follow these steps:
 
-#### Step 1: Download the model
+### Step 1: Download the model
 
 Use Ollama to pull your desired model (e.g., Mistral or Gemma):
 
@@ -46,12 +46,14 @@ Use Ollama to pull your desired model (e.g., Mistral or Gemma):
 ollama pull mistral
 ```
 
-Step 2: Update the test script
+### Step 2: Update the test script
+
 Add the new model name to the MODELS_TO_TEST list in test_local_benchmark.py:
 
 ```
 MODELS_TO_TEST = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b", "mistral"]
 ```
 
-Step 3: Expand test data (Optional)
+### Step 3: Expand test data (Optional)
+
 Add more complex scenarios to benchmark_data.json to challenge the new model's capabilities.
