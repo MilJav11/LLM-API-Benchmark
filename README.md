@@ -46,7 +46,7 @@ This framework is designed to be easily extensible. To add a new model to the be
 
 ```powershell
     MODELS_TO_TEST = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b", "mistral"]
+```
 
 3. Expand test data (Optional)
-    Add more complex scenarios to benchmark_data.json to challenge the new model's capabilities.
-```
+   Add more complex scenarios to benchmark_data.json to challenge the new model's capabilities.
