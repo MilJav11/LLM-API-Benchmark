@@ -1,0 +1,17 @@
+[
+  {
+    "category": "Geography",
+    "question": "What is the capital city of France?",
+    "expected": ["paris"]
+  },
+  {
+    "category": "Math",
+    "question": "What is 15 minus 7?",
+    "expected": ["8", "eight"]
+  },
+  {
+    "category": "Logic",
+    "question": "If ice is cold, fire is what?",
+    "expected": ["hot", "warm"]
+  }
+]
