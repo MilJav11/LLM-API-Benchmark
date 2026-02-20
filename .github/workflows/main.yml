@@ -26,24 +26,22 @@ jobs:
 
       - name: Install Ollama
         run: |
-          curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama.tgz
-          sudo tar -C /usr -xzf ollama.tgz
+          # Use official install script instead of manual tgz download
+          curl -fsSL https://ollama.com/install.sh | sh
           ollama --version
-          # Start Ollama server in the background
+          # Start Ollama server in background
           ollama serve & 
-          sleep 10 # Wait for the server to initialize
+          sleep 10 # Wait for initialization
 
       - name: Pull LLM Models
         run: |
           ollama pull llama3.2:1b
           ollama pull qwen2.5:0.5b
-          # Phi-3:mini is excluded due to hardware limitations on GitHub Runners
 
       - name: Run Benchmark Tests
         run: |
-          # Run tests for the available models
           pytest -v -s --html=benchmark_report.html --self-contained-html test_local_benchmark.py
-        continue-on-error: true # Ensure artifact upload even if tests fail
+        continue-on-error: true
 
       - name: Upload Test Report
         uses: actions/upload-artifact@v4
