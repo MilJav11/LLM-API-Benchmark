@@ -1,10 +1,16 @@
-import ollama
 import pytest
+import ollama
 import time
 import json
 
-# List of our three local models
-MODELS_TO_TEST = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b"]
+# Smart model detection: Only test models that are actually installed
+def get_available_models():
+    installed = [m['name'] for m in ollama.list()['models']]
+    # Filter only models we are interested in
+    target_models = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b"]
+    return [m for m in target_models if m in installed or m + ":latest" in installed]
+
+MODELS_TO_TEST = get_available_models()
 
 # Helper function to load test data
 def load_test_data():
