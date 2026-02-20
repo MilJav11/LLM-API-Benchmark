@@ -1,3 +1,5 @@
+[![LLM Benchmark CI](https://github.com/MilJav11/LLM-API-Benchmark/actions/workflows/main.yml/badge.svg)](https://github.com/MilJav11/LLM-API-Benchmark/actions/workflows/main.yml)
+
 # LLM Local API Benchmark 🚀
 
 Professional QA framework for benchmarking local LLMs (Llama 3.2, Phi-3, Qwen 2.5) using **Ollama** and **Pytest**.
