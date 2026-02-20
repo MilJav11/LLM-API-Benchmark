@@ -1,0 +1,52 @@
+name: LLM Benchmark CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ollama pytest pytest-html
+
+      - name: Install Ollama
+        run: |
+          curl -L https://ollama.com/download/ollama-linux-amd64.tgz -o ollama.tgz
+          sudo tar -C /usr -xzf ollama.tgz
+          ollama --version
+          # Start Ollama server in the background
+          ollama serve & 
+          sleep 10 # Wait for the server to initialize
+
+      - name: Pull LLM Models
+        run: |
+          ollama pull llama3.2:1b
+          ollama pull qwen2.5:0.5b
+          # Phi-3:mini is excluded due to hardware limitations on GitHub Runners
+
+      - name: Run Benchmark Tests
+        run: |
+          # Run tests for the available models
+          pytest -v -s --html=benchmark_report.html --self-contained-html test_local_benchmark.py
+        continue-on-error: true # Ensure artifact upload even if tests fail
+
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-html-report
+          path: benchmark_report.html
