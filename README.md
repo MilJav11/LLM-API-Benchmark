@@ -44,15 +44,14 @@ Use Ollama to pull your desired model (e.g., Mistral or Gemma):
 
 ```bash
 ollama pull mistral
+```
 
 Step 2: Update the test script
 Add the new model name to the MODELS_TO_TEST list in test_local_benchmark.py:
 
-Python
+```
 MODELS_TO_TEST = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b", "mistral"]
+```
 
 Step 3: Expand test data (Optional)
 Add more complex scenarios to benchmark_data.json to challenge the new model's capabilities.
-
----
-```
