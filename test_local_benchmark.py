@@ -3,12 +3,30 @@ import ollama
 import time
 import json
 
-# Smart model detection: Only test models that are actually installed
 def get_available_models():
-    installed = [m['name'] for m in ollama.list()['models']]
-    # Filter only models we are interested in
-    target_models = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b"]
-    return [m for m in target_models if m in installed or m + ":latest" in installed]
+    """Returns a list of models installed in Ollama, compatible with new/old API versions."""
+    try:
+        response = ollama.list()
+        
+        # Get models - checking both 'model' and 'name' keys for API compatibility
+        models_info = response.get('models', [])
+        installed = [m.get('model', m.get('name', '')) for m in models_info]
+        
+        target_models = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b"]
+        
+        # Clean names (API sometimes returns names with the ':latest' tag)
+        available = []
+        for target in target_models:
+            if any(target in inst for inst in installed):
+                available.append(target)
+        
+        if not available:
+            print("⚠️ No target models found in Ollama! Testing might fail.")
+            
+        return available
+    except Exception as e:
+        print(f"⚠️ Error listing models: {e}")
+        return []
 
 MODELS_TO_TEST = get_available_models()
 
