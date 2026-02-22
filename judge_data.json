@@ -1,0 +1,12 @@
+[
+  {
+    "category": "Explanation",
+    "question": "Explain the concept of 'CI/CD' in software development to a 10-year-old.",
+    "expected_concept": "The answer must use simple analogies (like building Lego or a factory assembly line) and explain that it's about automating the testing and delivery of code."
+  },
+  {
+    "category": "Fact Checking",
+    "question": "Which is heavier: 1 kilogram of steel or 1 kilogram of feathers?",
+    "expected_concept": "The answer must clearly state that they weigh exactly the same (1 kilogram)."
+  }
+]
