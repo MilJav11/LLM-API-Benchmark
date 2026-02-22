@@ -41,7 +41,7 @@ jobs:
       - name: Run Benchmark Tests
         run: |
           # Run all test files in the directory and combine them into one report
-          pytest -v -s --html=benchmark_report.html --self-contained-html test_local_benchmark.py test_llm_judge.py
+          pytest -v -s --html=benchmark_report.html --self-contained-html test_local_benchmark.py test_llm_judge.py test_security.py
         continue-on-error: true
 
       - name: Upload Test Report
