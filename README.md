@@ -30,6 +30,10 @@ The benchmark generates automated reports in two formats for easy analysis:
 - **pytest-html** - Automated reporting plugin.
 - **JSON** - Structured test data management.
 
+### ⚖️ Advanced Evaluation (LLM-as-a-Judge)
+
+Beyond simple exact-match assertions, this framework implements the **LLM-as-a-Judge** pattern. A designated evaluator model (e.g., Llama 3.2) is dynamically prompted to act as a strict QA engineer. It reads the complex reasoning outputs of target models and automatically outputs a `PASS` or `FAIL` verdict based on semantic correctness.
+
 ## 🔍 QA Insights
 
 During testing, we discovered that **Qwen 2.5:0.5b** has issues following strict "one-word" constraints in logical tasks, often echoing the question or adding context. **Llama 3.2:1b** provides the best balance between speed and reliability.
