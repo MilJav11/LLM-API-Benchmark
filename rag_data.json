@@ -18,7 +18,8 @@
       "cannot answer",
       "not specify",
       "does not explicitly state",
-      "not possible to determine"
+      "not possible to determine",
+      "not enough information provided"
     ],
     "forbidden_keywords": []
   }
