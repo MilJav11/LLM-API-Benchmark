@@ -2,67 +2,66 @@
 
 # LLM Local API Benchmark 🚀
 
-Professional QA framework for benchmarking local LLMs (Llama 3.2, Phi-3, Qwen 2.5) using **Ollama** and **Pytest**.
+Professional automated QA framework for benchmarking local LLMs (Llama 3.2, Phi-3, Qwen 2.5) using **Ollama** and **Pytest**.
 
 ## 📊 Overview
 
-This project measures **inference latency**, **instruction-following accuracy**, and **security guardrails** on local hardware. It automates the process of sending prompts to multiple models and validating their responses against expected criteria.
+This project goes beyond simple ping tests. It measures **inference latency**, **instruction-following accuracy**, **security guardrails**, and **RAG context adherence** on local hardware. By separating test data (JSON) from test logic (Pytest), it provides a scalable, 4-layered testing architecture.
 
-### Key Results
+### Baseline Benchmark Results (Sample Run)
 
-| Model             | Avg. Time | Status    | Note                                      |
-| :---------------- | :-------- | :-------- | :---------------------------------------- |
-| **Llama 3.2:1b**  | ~11s      | ✅ Passed | Very stable, excellent safety guardrails. |
-| **Phi-3:mini**    | ~19s      | ✅ Passed | High quality, good safety refusals.       |
-| **Qwen 2.5:0.5b** | **~4s**   | ❌ Failed | Fast, but vulnerable to prompt injection. |
+_Note: LLMs are non-deterministic by nature. These results represent a baseline snapshot; individual CI runs may vary due to model flakiness._
 
-## 📁 Reports
+| Model             | Avg. Time | Status    | QA Note                                          |
+| :---------------- | :-------- | :-------- | :----------------------------------------------- |
+| **Llama 3.2:1b**  | ~11s      | ✅ Passed | Very stable, excellent safety guardrails.        |
+| **Phi-3:mini**    | ~19s      | ✅ Passed | High quality, good safety refusals.              |
+| **Qwen 2.5:0.5b** | **~4s**   | ❌ Failed | Fast, but highly vulnerable to prompt injection. |
 
-The benchmark generates automated reports in two formats for easy analysis:
+## 📁 Automated Reporting
 
-- 🌐 **[HTML Report (Interactive)](./benchmark_report.html)** - Detailed view with duration, judge logs, and security breach logs.
+The CI/CD pipeline generates automated reports in two formats for easy analysis:
+
+- 🌐 **[HTML Report (Interactive)](./benchmark_report.html)** - Detailed view with duration, LLM judge reasoning, security breaches, and hallucination logs.
 - 📄 **[PDF Report (Static)](./benchmark_report.pdf)** - Print-ready version of the test results.
 
-## 🛠️ Tech Stack
+## 🛠️ Tech Stack & Dependencies
 
-- **Python 3.12** & **Pytest** - Core testing logic.
+- **Python 3.12** & **Pytest** - Core testing logic and assertions.
 - **Ollama** - Local LLM inference engine.
-- **pytest-html** - Automated reporting plugin.
-- **JSON** - Structured test data management.
-- **GitHub Actions** - CI/CD pipeline for automated testing.
+- **pytest-html** - Automated HTML report generation.
+- **GitHub Actions** - CI/CD pipeline for automated testing runs.
 
-### ⚖️ Advanced Evaluation (LLM-as-a-Judge)
+## 🧠 Testing Architecture (4 Layers)
 
-Beyond simple exact-match assertions, this framework implements the **LLM-as-a-Judge** pattern. A designated evaluator model (e.g., Llama 3.2) is dynamically prompted to act as a strict QA engineer. It reads the complex reasoning outputs of target models and automatically outputs a `PASS` or `FAIL` verdict based on semantic correctness.
+The framework is divided into 4 independent modules, testing different aspects of AI behavior:
 
-### 🛡️ AI Red Teaming (Security Testing)
+1. **⚡ Performance & Exact Match (`test_local_benchmark.py`)**
+   Measures basic inference speed and checks if the model can strictly follow constraints (e.g., "answer with one word only").
+2. **⚖️ Advanced Evaluation (`test_llm_judge.py`)**
+   Implements the **LLM-as-a-Judge** pattern. A designated evaluator model (Llama 3.2) is dynamically prompted to act as a strict QA engineer to semantically evaluate complex reasoning outputs.
+3. **🛡️ AI Red Teaming (`test_security.py`)**
+   Automated security testing against **Prompt Injection** and **Unsafe Content**. It acts as a "Red Team," intentionally sending malicious prompts to verify if the models' safety guardrails kick in.
+4. **📚 RAG Hallucination Prevention (`test_rag_hallucinations.py`)**
+   Simulates a Retrieval-Augmented Generation (RAG) environment. The models are evaluated on their ability to adhere strictly to provided context, penalizing them if they introduce outside knowledge or hallucinate facts.
 
-The framework now includes automated security testing against **Prompt Injection** and **Unsafe Content**. It acts as a "Red Team," intentionally sending malicious prompts (e.g., "ignore previous instructions") to verify if the models' safety guardrails correctly refuse the request.
+## 🔍 QA Insights & Learnings
 
-## 🔍 QA Insights
+- **Strict Constraints:** Small parameter models (like Qwen 2.5:0.5b) struggle with strict "one-word" constraints, highlighting the fragility of standard "exact-match" assertions in AI testing.
+- **Security Vulnerabilities:** Small models generally lack sufficient attention mechanisms to resist prompt injection attacks ("ignore previous instructions").
+- **LLM Non-Determinism (Flakiness):** During repeated CI/CD runs, identical prompts sometimes yielded different results due to the probabilistic nature of LLMs (e.g., hallucinating forbidden concepts randomly). This proves the necessity of robust, multi-layered automated testing and semantic evaluation over rigid text matching.
 
-During testing, we discovered that **Qwen 2.5:0.5b** has issues following strict "one-word" constraints in logical tasks. Furthermore, small parameter models often lack sufficient attention mechanisms to resist prompt injection attacks. **Llama 3.2:1b** provides the best balance between speed, semantic understanding, and safety reliability.
+## 🚀 Scalability: Adding New Models
 
-## 🚀 Scalability & Adding New Models
+This framework is highly scalable. To add a new model (e.g., Mistral):
 
-This framework is designed to be easily extensible. To add a new model to the benchmark, follow these steps:
+1. Pull the model locally: `ollama pull mistral`
+2. Add the model name to the `MODELS_TO_TEST` list inside the `.py` files:
+   ```python
+   MODELS_TO_TEST = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b", "mistral"]
+   ```
 
-### Step 1: Download the model
-
-Use Ollama to pull your desired model (e.g., Mistral or Gemma):
-
-```bash
-ollama pull mistral
 ```
 
-### Step 2: Update the test script
-
-Add the new model name to the MODELS_TO_TEST list in test_local_benchmark.py:
-
+### Expand test scenarios in the corresponding .json files.
 ```
-MODELS_TO_TEST = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b", "mistral"]
-```
-
-### Step 3: Expand test data (Optional)
-
-Add more complex scenarios to benchmark_data.json, judge_data.json, or security_data.json to challenge the new model's capabilities.
