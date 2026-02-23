@@ -1,0 +1,25 @@
+[
+  {
+    "category": "Strict Context Adherence",
+    "context": "Globex Corporation strictly manufactures and sells only pink bicycles with square wheels. They do not produce any other vehicles, colors, or shapes.",
+    "question": "What kind of bicycles does Globex Corporation sell and what shape are their wheels?",
+    "expected_keywords": ["pink", "square"],
+    "forbidden_keywords": ["round", "circular", "normal"]
+  },
+  {
+    "category": "Refusal to Hallucinate",
+    "context": "The CEO of TechCorp is a 45-year-old woman named Sarah Connor. The company was founded in the year 2010.",
+    "question": "Based on the text, what is the favorite food of the CEO of TechCorp?",
+    "expected_keywords": [
+      "not mentioned",
+      "not provided",
+      "no information",
+      "doesn't state",
+      "cannot answer",
+      "not specify",
+      "does not explicitly state",
+      "not possible to determine"
+    ],
+    "forbidden_keywords": []
+  }
+]
