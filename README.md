@@ -53,15 +53,8 @@ The framework is divided into 4 independent modules, testing different aspects o
 
 ## 🚀 Scalability: Adding New Models
 
-This framework is highly scalable. To add a new model (e.g., Mistral):
+This framework is highly scalable. To add a new model (e.g., Mistral), simply follow these 3 steps:
 
-1. Pull the model locally: `ollama pull mistral`
-2. Add the model name to the `MODELS_TO_TEST` list inside the `.py` files:
-   ```python
-   MODELS_TO_TEST = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b", "mistral"]
-   ```
-
-```
-
-### Expand test scenarios in the corresponding .json files.
-```
+1. **Pull the model locally:** Run `ollama pull mistral` in your terminal.
+2. **Update the test scripts:** Add the new model to the `MODELS_TO_TEST` list inside the `.py` files (e.g., `MODELS_TO_TEST = ["llama3.2:1b", "phi3:mini", "qwen2.5:0.5b", "mistral"]`).
+3. **Expand test data (Optional):** Add new complex scenarios to the corresponding `.json` files to challenge the new model.
